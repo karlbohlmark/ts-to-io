@@ -12,6 +12,7 @@
   "files": [
     "src/**/*",
     "tsconfig.json",
+    "jest.config.js",
     "cli.js"
   ],
   "scripts": {
