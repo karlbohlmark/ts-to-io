@@ -32,27 +32,9 @@ const processObjectType = (checker: ts.TypeChecker) => (
   type: ts.ObjectType
 ) => {
   const properties = checker.getPropertiesOfType(type);
-  const requiredProperties = properties.filter(
-    p => !(p.valueDeclaration as ts.ParameterDeclaration).questionToken
-  );
-  const optionalProperties = properties.filter(
-    p => (p.valueDeclaration as ts.ParameterDeclaration).questionToken
-  );
-  if (requiredProperties.length && optionalProperties.length) {
-    return `t.intersection([t.type({${requiredProperties.map(
-      processProperty(checker)
-    )}}), t.partial({${optionalProperties
-      .map(processProperty(checker))
-      .join(", ")}})])`;
-  } else if (optionalProperties.length === 0) {
-    return `t.type({${requiredProperties
-      .map(processProperty(checker))
-      .join(", ")}})`;
-  } else {
-    return `t.partial({${optionalProperties
-      .map(processProperty(checker))
-      .join(", ")}})`;
-  }
+  return `t.type({${properties
+    .map(processProperty(checker))
+    .join(", ")}})`;
 };
 
 const processType = (checker: ts.TypeChecker) => (type: ts.Type): string => {
